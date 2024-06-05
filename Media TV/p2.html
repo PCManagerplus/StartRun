@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全画面ビデオプレイリスト</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #playlistSettings {
+            display: none;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #playlistSettings input {
+            display: block;
+            margin-bottom: 10px;
+        }
+        #fullscreenMessage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <video id="backgroundVideo" autoplay muted></video>
+
+    <div id="playlistSettings">
+        <h3>プレイリスト設定</h3>
+        <input type="file" id="videoUpload" accept="video/*">
+        <ul id="playlist"></ul>
+        <button onclick="savePlaylist()">保存</button>
+    </div>
+
+    <div id="fullscreenMessage">
+        このページは全画面で表示されます。<br>
+        <button onclick="enterFullscreen()">全画面にする</button>
+    </div>
+
+    <script>
+        const videoElement = document.getElementById('backgroundVideo');
+        const playlistSettings = document.getElementById('playlistSettings');
+        const videoUpload = document.getElementById('videoUpload');
+        const playlistElement = document.getElementById('playlist');
+        const fullscreenMessage = document.getElementById('fullscreenMessage');
+        let videoPlaylist = JSON.parse(localStorage.getItem('videoPlaylist')) || [];
+        let currentVideoIndex = 0;
+
+        function playNextVideo() {
+            if (videoPlaylist.length === 0) return;
+            videoElement.src = videoPlaylist[currentVideoIndex];
+            videoElement.play();
+            currentVideoIndex = (currentVideoIndex + 1) % videoPlaylist.length;
+        }
+
+        videoElement.addEventListener('ended', playNextVideo);
+
+        function savePlaylist() {
+            localStorage.setItem('videoPlaylist', JSON.stringify(videoPlaylist));
+            alert('プレイリストを保存しました。');
+        }
+
+        videoUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                videoPlaylist.push(url);
+                updatePlaylistUI();
+                savePlaylist();
+            }
+        });
+
+        function updatePlaylistUI() {
+            playlistElement.innerHTML = '';
+            videoPlaylist.forEach((video, index) => {
+                const li = document.createElement('li');
+                li.textContent = `動画 ${index + 1}`;
+                playlistElement.appendChild(li);
+            });
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 's' || event.key === 'S') {
+                playlistSettings.style.display = playlistSettings.style.display === 'none' ? 'block' : 'none';
+            }
+        });
+
+        function enterFullscreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                document.documentElement.msRequestFullscreen();
+            }
+            fullscreenMessage.style.display = 'none';
+        }
+
+        // 初回再生
+        if (videoPlaylist.length > 0) {
+            playNextVideo();
+        }
+
+        // ページロード時にUIを更新
+        updatePlaylistUI();
+    </script>
+</body>
+</html>
