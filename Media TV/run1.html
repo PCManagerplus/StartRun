@@ -13,11 +13,14 @@
             align-items: center;
             height: 100vh;
         }
+        .custom-spinner .spinner-layer {
+            border-width: 10px !important; /* ここで線の太さを指定します */
+        }
     </style>
 </head>
 <body>
     <div class="spinner-container">
-        <div class="preloader-wrapper big active">
+        <div class="preloader-wrapper big active custom-spinner">
             <div class="spinner-layer spinner-blue">
                 <div class="circle-clipper left">
                     <div class="circle"></div>
@@ -29,38 +32,4 @@
             </div>
 
             <div class="spinner-layer spinner-red">
-                <div class="circle-clipper left">
-                    <div class="circle"></div>
-                </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-            </div>
-
-            <div class="spinner-layer spinner-yellow">
-                <div class="circle-clipper left">
-                    <div class="circle"></div>
-                </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-            </div>
-
-            <div class="spinner-layer spinner-green">
-                <div class="circle-clipper left">
-                    <div class="circle"></div>
-                </div><div class="gap-patch">
-                    <div class="circle"></div>
-                </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Materialize JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-</body>
-</html>
+                <div
