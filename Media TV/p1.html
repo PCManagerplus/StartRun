@@ -67,11 +67,13 @@
                 showMessage("サービスを開始しています。", 5000, function() {
                     showMessage("全画面にしています。", 3000, function() {
                         enterFullScreen();
-                        showMessage("動画を読み込んでいます。", 10000, function() {
-                            showMessage("準備が完了しました。プレーヤーを起動します。", 3000, function() {
-                                window.location.href = "http://example.com"; // リダイレクト先のURLに変更
+                        setTimeout(function() {
+                            showMessage("動画を読み込んでいます。", 10000, function() {
+                                showMessage("準備が完了しました。プレーヤーを起動します。", 3000, function() {
+                                    window.location.href = "http://example.com"; // リダイレクト先のURLに変更
+                                });
                             });
-                        });
+                        }, 1000); // 全画面モードに入る時間を少し確保
                     });
                 });
             });
