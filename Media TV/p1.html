@@ -49,31 +49,13 @@
             setTimeout(callback, duration);
         }
 
-        function enterFullScreen() {
-            const element = document.documentElement;
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.mozRequestFullScreen) { // Firefox
-                element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullscreen) { // Chrome, Safari, and Opera
-                element.webkitRequestFullscreen();
-            } else if (element.msRequestFullscreen) { // IE/Edge
-                element.msRequestFullscreen();
-            }
-        }
-
         function startSequence() {
             showMessage("起動中...", 3000, function() {
                 showMessage("サービスを開始しています。", 5000, function() {
-                    showMessage("全画面にしています。", 3000, function() {
-                        enterFullScreen();
-                        setTimeout(function() {
-                            showMessage("動画を読み込んでいます。", 10000, function() {
-                                showMessage("準備が完了しました。プレーヤーを起動します。", 3000, function() {
-                                    window.location.href = "http://example.com"; // リダイレクト先のURLに変更
-                                });
-                            });
-                        }, 1000); // 全画面モードに入る時間を少し確保
+                    showMessage("動画を読み込んでいます。", 10000, function() {
+                        showMessage("準備が完了しました。プレーヤーを起動します。", 3000, function() {
+                            window.location.href = "http://example.com"; // リダイレクト先のURLに変更
+                        });
                     });
                 });
             });
